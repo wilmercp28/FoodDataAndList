@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.konan.properties.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+
 }
 
 android {
@@ -33,7 +35,11 @@ android {
 
         val apiKey = properties.getProperty("API_KEY") ?: ""
 
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+
     }
+
+
 
     buildTypes {
         release {
@@ -53,6 +59,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -65,7 +72,10 @@ android {
 }
 
 dependencies {
-
+    implementation (libs.kotlinx.serialization.json)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.kotlinx.coroutines.core)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
