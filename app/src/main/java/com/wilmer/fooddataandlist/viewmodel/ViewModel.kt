@@ -28,8 +28,6 @@ class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
     fun fetchFoodSearch(query: String) {
         viewModelScope.launch {
             _foodSearch.value = repository.searchFoods(query,1,10)
-            Log.e("response",_foodSearch.value.toString())
-
         }
     }
 }

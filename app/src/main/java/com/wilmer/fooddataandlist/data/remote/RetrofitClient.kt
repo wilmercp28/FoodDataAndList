@@ -9,7 +9,7 @@ object RetrofitInstance {
 
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://api.nal.usda.gov/")
+            .baseUrl("https://api.nal.usda.gov/fdc/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -17,4 +17,5 @@ object RetrofitInstance {
     val api: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }
+
 }

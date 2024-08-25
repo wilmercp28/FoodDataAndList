@@ -30,9 +30,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             FoodDataAndListTheme {
                 viewModel.fetchFoodSearch("apple")
-                val response by viewModel.foodDetails.collectAsState(initial = "")
-                Text(text = response)
-
             }
         }
     }

@@ -41,7 +41,7 @@ data class Food(
     @SerialName("ndbNumber") val ndbNumber: Int,
     @SerialName("additionalDescriptions") val additionalDescriptions: String,
     @SerialName("allHighlightFields") val allHighlightFields: String,
-    @SerialName("score") val score: Int
+    @SerialName("score") val score: Double
 )
 
 @Serializable
