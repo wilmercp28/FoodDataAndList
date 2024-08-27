@@ -2,16 +2,18 @@ package com.wilmer.fooddataandlist.data.remote
 
 import android.util.Log
 import com.wilmer.fooddataandlist.BuildConfig
+import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.data.model.FoodSearchResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 const val apiKey = BuildConfig.API_KEY
 
 class FoodRepository(private val apiService: ApiService) {
 
-    suspend fun getFoodDetails(fdcId: String): Response<String> {
+    suspend fun getFoodDetails(fdcId: String): Response<FoodDetail> {
         return apiService.getFoodDetails(fdcId, apiKey)
     }
 

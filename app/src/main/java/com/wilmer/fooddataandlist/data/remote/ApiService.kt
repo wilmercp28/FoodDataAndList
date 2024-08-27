@@ -1,5 +1,6 @@
 package com.wilmer.fooddataandlist.data.remote
 
+import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.data.model.FoodSearchResponse
 import retrofit2.Call
 import retrofit2.Response
@@ -16,7 +17,7 @@ interface ApiService {
     suspend fun getFoodDetails(
         @Path("fdcId") fdcId: String,
         @Query("api_key") apiKey: String,
-    ): Response<String>
+    ): Response<FoodDetail>
 
     @GET("/v1/foods")
     suspend fun getMultipleFoodDetails(

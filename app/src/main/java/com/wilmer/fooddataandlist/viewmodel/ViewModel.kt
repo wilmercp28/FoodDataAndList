@@ -1,33 +1,30 @@
 package com.wilmer.fooddataandlist.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wilmer.fooddataandlist.data.model.FoodSearchResponse
+import com.wilmer.fooddataandlist.data.mock.getMockFoodList
+import com.wilmer.fooddataandlist.data.model.Food
+import com.wilmer.fooddataandlist.data.model.FoodDetail
+import com.wilmer.fooddataandlist.data.model.FoodList
 import com.wilmer.fooddataandlist.data.remote.FoodRepository
-import kotlinx.coroutines.flow.Flow
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
+@HiltViewModel
+class FoodViewModel @Inject constructor(private val repository: FoodRepository) : ViewModel() {
 
-    private val _foodDetails = MutableStateFlow<String>("")
-    val foodDetails: Flow<String> = _foodDetails
+    private val _foodList = MutableStateFlow<List<FoodList>>(getMockFoodList(100))
+    val foodList: MutableStateFlow<List<FoodList>> get() = _foodList
 
-    private val _foodSearch = MutableStateFlow<FoodSearchResponse?>(null)
-    val foodSearch: StateFlow<FoodSearchResponse?>  get() = _foodSearch
-
-    fun fetchFoodDetails(fdcId: String) {
-        viewModelScope.launch {
-            _foodDetails.value = repository.getFoodDetails(fdcId).body().toString()
-        }
+    suspend fun fetchFoodDetails(fdcId: String): FoodDetail? {
+            return repository.getFoodDetails(fdcId).body()
     }
 
-    fun fetchFoodSearch(query: String) {
-        viewModelScope.launch {
-            _foodSearch.value = repository.searchFoods(query,1,10)
-        }
+   suspend fun fetchFoodSearch(query: String): List<Food?> {
+        return repository.searchFoods(query, 0, 50)?.foods ?: emptyList()
     }
+
+
 }
