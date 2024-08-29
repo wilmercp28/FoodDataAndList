@@ -13,18 +13,21 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("/v1/food/{fdcId}")
+    @Headers("Content-Type: application/json")
+    @GET("food/{fdcId}")
     suspend fun getFoodDetails(
-        @Path("fdcId") fdcId: String,
+        @Path("fdcId") fdcId: Int,
         @Query("api_key") apiKey: String,
     ): Response<FoodDetail>
 
+    @Headers("Content-Type: application/json")
     @GET("/v1/foods")
     suspend fun getMultipleFoodDetails(
-        @Query("fdcIds") fdcIds: String,  // Pass as a comma-separated string
+        @Query("fdcIds") fdcIds: String,
         @Query("api_key") apiKey: String,
     ): Response<String>
 
+    @Headers("Content-Type: application/json")
     @GET("/v1/foods/list")
     suspend fun getPagedFoodList(
         @Query("page") page: Int,

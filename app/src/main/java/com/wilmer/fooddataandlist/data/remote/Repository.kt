@@ -2,40 +2,53 @@ package com.wilmer.fooddataandlist.data.remote
 
 import android.util.Log
 import com.wilmer.fooddataandlist.BuildConfig
+import com.wilmer.fooddataandlist.data.cache.Cache
 import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.data.model.FoodSearchResponse
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
-const val apiKey = BuildConfig.API_KEY
 
 class FoodRepository(private val apiService: ApiService) {
 
-    suspend fun getFoodDetails(fdcId: String): Response<FoodDetail> {
-        return apiService.getFoodDetails(fdcId, apiKey)
+    companion object {
+        private const val APIKEY = BuildConfig.API_KEY
+    }
+
+    private val foodDetailsCache = Cache<Int, FoodDetail>()
+    private val searchCache = Cache<String, FoodSearchResponse>()
+
+    suspend fun getFoodDetails(fdcId: Int): FoodDetail? {
+        return foodDetailsCache.get(fdcId) ?: try {
+            val response = apiService.getFoodDetails(fdcId, APIKEY)
+            Log.d("FoodRepository", "Response: $response")
+            if (response.isSuccessful) {
+                foodDetailsCache.put(fdcId, response.body()!!)
+                response.body()
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            null
+        }
+
     }
 
 
     suspend fun getPagedFoodList(page: Int, size: Int): Response<String> {
-        return apiService.getPagedFoodList(page, size, apiKey)
+        return apiService.getPagedFoodList(page, size, APIKEY)
     }
 
 
-    private val cache = mutableMapOf<String, FoodSearchResponse>()
-
     suspend fun searchFoods(query: String, page: Int, size: Int): FoodSearchResponse? {
-        val cacheKey = "$query-$page-$size"
-        return cache[cacheKey] ?: try {
+        return searchCache.get(query) ?: try {
             val response = apiService.searchFoods(
                 query = query,
                 pageNumber = page,
                 pageSize = size,
-                apiKey = apiKey
+                apiKey = APIKEY
             )
             if (response.isSuccessful) {
-                cache[cacheKey] = response.body()!!
+                searchCache.put(query, response.body()!!)
                 response.body()
             } else {
                 null

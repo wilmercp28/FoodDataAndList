@@ -15,11 +15,15 @@ import javax.inject.Inject
 @HiltViewModel
 class FoodViewModel @Inject constructor(private val repository: FoodRepository) : ViewModel() {
 
+
+    private val _foodDetails = MutableStateFlow<Map<Int, FoodDetail>>(emptyMap())
+    val foodDetails: MutableStateFlow<Map<Int, FoodDetail>> get() = _foodDetails
+
     private val _foodList = MutableStateFlow<List<FoodList>>(getMockFoodList(100))
     val foodList: MutableStateFlow<List<FoodList>> get() = _foodList
 
-    suspend fun fetchFoodDetails(fdcId: String): FoodDetail? {
-            return repository.getFoodDetails(fdcId).body()
+    suspend fun fetchFoodDetails(fdcId: Int): FoodDetail? {
+            return repository.getFoodDetails(fdcId)
     }
 
    suspend fun fetchFoodSearch(query: String): List<Food?> {

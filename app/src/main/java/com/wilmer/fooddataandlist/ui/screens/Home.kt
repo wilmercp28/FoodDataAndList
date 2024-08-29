@@ -1,6 +1,7 @@
 package com.wilmer.fooddataandlist.ui.screens
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +28,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.wilmer.fooddataandlist.data.model.Destinations
 import com.wilmer.fooddataandlist.data.model.Food
 import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.ui.components.ListCard
@@ -61,16 +64,15 @@ fun Home(viewModel: FoodViewModel, navController: NavController) {
                 onActiveChange = {},
                 content = {}
             )
-
             LazyColumn(
                 modifier = Modifier,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(foodList) { list ->
-                    ListCard(list = list )
+                    ListCard(list = list ){
+                        navController.navigate(Destinations.List.createRoute(foodList.indexOf(list)))
+                    }
                 }
-
-
             }
         }
     }
