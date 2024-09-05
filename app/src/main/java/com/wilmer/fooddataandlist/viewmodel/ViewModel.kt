@@ -1,15 +1,15 @@
 package com.wilmer.fooddataandlist.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.wilmer.fooddataandlist.data.mock.getMockFoodList
 import com.wilmer.fooddataandlist.data.model.Food
 import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.data.model.FoodList
+import com.wilmer.fooddataandlist.data.model.Item
 import com.wilmer.fooddataandlist.data.remote.FoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,11 +22,34 @@ class FoodViewModel @Inject constructor(private val repository: FoodRepository) 
     private val _foodList = MutableStateFlow<List<FoodList>>(getMockFoodList(100))
     val foodList: MutableStateFlow<List<FoodList>> get() = _foodList
 
-    suspend fun fetchFoodDetails(fdcId: Int): FoodDetail? {
-            return repository.getFoodDetails(fdcId)
+    fun checkItem(item: Item, listIndex: Int) {
+        _foodList.update { currentList ->
+            currentList.toMutableList().apply {
+                this[listIndex].items.find { it.id == item.id }?.let { foundItem ->
+                    val updatedItem = foundItem.copy(checked = !foundItem.checked)
+                    val updatedItems = this[listIndex].items.toMutableList().apply {
+                        val itemIndex = indexOf(foundItem)
+                        this[itemIndex] = updatedItem
+                    }
+                    this[listIndex] = this[listIndex].copy(items = updatedItems)
+                }
+            }
+        }
     }
 
-   suspend fun fetchFoodSearch(query: String): List<Food?> {
+    suspend fun fetchFoodDetails(fdcId: Int) {
+        val response = repository.getFoodDetails(fdcId)
+        if (response != null) {
+            _foodDetails.update { currentMap ->
+                currentMap.toMutableMap().apply {
+                    this[fdcId] = response
+                }
+            }
+        }
+    }
+
+
+    suspend fun fetchFoodSearch(query: String): List<Food?> {
         return repository.searchFoods(query, 0, 50)?.foods ?: emptyList()
     }
 

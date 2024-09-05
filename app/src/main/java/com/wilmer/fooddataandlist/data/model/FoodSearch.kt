@@ -46,10 +46,19 @@ data class Food(
 
 @Serializable
 data class FoodNutrient(
-    @SerialName("number") val number: Int,
-    @SerialName("name") val name: String,
+    @SerialName("id") val id: Int,
+    @SerialName("type") val type: String,
     @SerialName("amount") val amount: Double,
-    @SerialName("unitName") val unitName: String,
-    @SerialName("derivationCode") val derivationCode: String,
-    @SerialName("derivationDescription") val derivationDescription: String
+    @SerialName("nutrient") val nutrient: Nutrients
+
 )
+
+@Serializable
+data class Nutrients(
+    @SerialName("id") val id: Int,
+    @SerialName("number") val number: String,
+    @SerialName("name") val name: String,
+    @SerialName("rank") val rank: Int,
+    @SerialName("unitName") val unitName: String
+)
+

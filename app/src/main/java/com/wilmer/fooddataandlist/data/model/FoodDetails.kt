@@ -2,8 +2,10 @@ package com.wilmer.fooddataandlist.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import java.util.UUID
 
-@Serializable
+
 data class FoodDetail(
     @SerialName("dataType") val dataType: String,
     @SerialName("description") val description: String,
@@ -15,3 +17,5 @@ data class FoodDetail(
     @SerialName("ndbNumber") val ndbNumber: Int,
     @SerialName("foodCode") val foodCode: String
 )
+
+
