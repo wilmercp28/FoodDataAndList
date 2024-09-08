@@ -2,10 +2,11 @@ package com.wilmer.fooddataandlist.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.wilmer.fooddataandlist.data.mock.getMockFoodList
-import com.wilmer.fooddataandlist.data.model.Food
+import com.wilmer.fooddataandlist.data.model.ApiResponseFormat
 import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.data.model.FoodList
 import com.wilmer.fooddataandlist.data.model.Item
+import com.wilmer.fooddataandlist.data.model.NutrietsQuerry
 import com.wilmer.fooddataandlist.data.remote.FoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +39,7 @@ class FoodViewModel @Inject constructor(private val repository: FoodRepository) 
     }
 
     suspend fun fetchFoodDetails(fdcId: Int) {
-        val response = repository.getFoodDetails(fdcId)
+        val response = repository.getFoodDetails(fdcId,NutrietsQuerry.Short,ApiResponseFormat.abridged.name)
         if (response != null) {
             _foodDetails.update { currentMap ->
                 currentMap.toMutableMap().apply {
@@ -49,7 +50,7 @@ class FoodViewModel @Inject constructor(private val repository: FoodRepository) 
     }
 
 
-    suspend fun fetchFoodSearch(query: String): List<Food?> {
+    suspend fun fetchFoodSearch(query: String): List<FoodDetail?> {
         return repository.searchFoods(query, 0, 50)?.foods ?: emptyList()
     }
 

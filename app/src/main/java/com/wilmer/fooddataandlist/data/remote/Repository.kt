@@ -3,8 +3,10 @@ package com.wilmer.fooddataandlist.data.remote
 import android.util.Log
 import com.wilmer.fooddataandlist.BuildConfig
 import com.wilmer.fooddataandlist.data.cache.Cache
+
 import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.data.model.FoodSearchResponse
+import com.wilmer.fooddataandlist.data.model.NutrietsQuerry
 import retrofit2.Response
 
 
@@ -17,9 +19,9 @@ class FoodRepository(private val apiService: ApiService) {
     private val foodDetailsCache = Cache<Int, FoodDetail>()
     private val searchCache = Cache<String, FoodSearchResponse>()
 
-    suspend fun getFoodDetails(fdcId: Int): FoodDetail? {
+    suspend fun getFoodDetails(fdcId: Int, nutrients: NutrietsQuerry, format: String): FoodDetail? {
         return foodDetailsCache.get(fdcId) ?: try {
-            val response = apiService.getFoodDetails(fdcId, APIKEY)
+            val response = apiService.getFoodDetails(fdcId,format,nutrients.ids,APIKEY)
             Log.d("FoodRepository", "Response: $response")
             if (response.isSuccessful) {
                 foodDetailsCache.put(fdcId, response.body()!!)

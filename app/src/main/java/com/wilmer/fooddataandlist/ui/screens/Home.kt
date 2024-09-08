@@ -29,8 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.wilmer.fooddataandlist.data.model.Destinations
-import com.wilmer.fooddataandlist.data.model.Food
-import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.ui.components.ListCard
 import com.wilmer.fooddataandlist.utilities.KeyBoardUtilities
 import com.wilmer.fooddataandlist.viewmodel.FoodViewModel

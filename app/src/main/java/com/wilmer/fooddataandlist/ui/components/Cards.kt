@@ -1,5 +1,6 @@
 package com.wilmer.fooddataandlist.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.wilmer.fooddataandlist.data.model.FoodDetail
 import com.wilmer.fooddataandlist.data.model.FoodList
 import com.wilmer.fooddataandlist.data.model.Item
 import com.wilmer.fooddataandlist.data.model.Sizes
@@ -74,8 +74,12 @@ fun ItemCard(
             if (foodDetail == null) {
                 Text(text = "Loading...")
             } else {
-                Text(text = foodDetail.description)
-                NutrientsCard(listOfNutrients = foodDetail.foodNutrients)
+                FontUtilities.ScaledTitleLargeText(text = foodDetail.description, size = Sizes.EXTRASMAll)
+                foodDetail.foodNutrients?.let { nutrients ->
+                    Log.d("Nutrients", "Nutrients: $nutrients")
+                    NutrientsCard(listOfNutrients = nutrients)
+                }
+
             }
         }
     }
