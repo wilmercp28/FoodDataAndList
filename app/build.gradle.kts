@@ -32,15 +32,29 @@ android {
             // Create the file if it doesn't exist
             keystoreFile.createNewFile()
             // Write a default placeholder API key
-            keystoreFile.writeText("API_KEY=your_api_key_here")
+            keystoreFile.writeText(
+                """
+        CLIENT_ID=your_api_key_here
+        CLIENT_SECRET=your_api_key_here
+        CONSUMER_KEY=your_api_key_here
+        CONSUMER_SECRET=your_api_key_here
+        """.trimIndent()
+            )
         }
         val properties = Properties().apply {
             load(keystoreFile.inputStream())
         }
 
-        val apiKey = properties.getProperty("API_KEY") ?: ""
+        val clientID = properties.getProperty("CLIENT_ID") ?: ""
+        val clientSecret = properties.getProperty("CLIENT_SECRET") ?: ""
+        val consumerKey = properties.getProperty("CONSUMER_KEY") ?: ""
+        val consumerSecret = properties.getProperty("CONSUMER_SECRET") ?: ""
 
-        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "CLIENT_ID", "\"$clientID\"")
+        buildConfigField("String", "CLIENT_SECRET", "\"$clientSecret\"")
+        buildConfigField("String", "CONSUMER_KEY", "\"$consumerKey\"")
+        buildConfigField("String", "CONSUMER_SECRET", "\"$consumerSecret\"")
+
 
     }
 
@@ -79,6 +93,7 @@ android {
 }
 
 dependencies {
+
     implementation (libs.kotlinx.serialization.json)
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
@@ -91,6 +106,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -112,6 +128,12 @@ dependencies {
 
     // Jetpack Compose integration
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    //timber
+    implementation (libs.timber)
+
+    //okhttp3
+    implementation (libs.okhttp)
 
 }
 

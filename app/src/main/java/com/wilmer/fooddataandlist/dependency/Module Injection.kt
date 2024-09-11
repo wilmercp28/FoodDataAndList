@@ -1,7 +1,8 @@
 package com.wilmer.fooddataandlist.dependency
 
-import com.wilmer.fooddataandlist.data.remote.ApiService
-import com.wilmer.fooddataandlist.data.remote.FoodRepository
+import com.wilmer.fooddataandlist.data.remote.FatSecretApiService
+import com.wilmer.fooddataandlist.data.remote.OAuthService
+import com.wilmer.fooddataandlist.data.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,19 +17,19 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideFatSecretRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.nal.usda.gov/fdc/v1/")
+            .baseUrl("https://platform.fatsecret.com/rest/") // Base URL for FatSecret API
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
     @Provides
-    @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    fun provideFatSecretApiService(retrofit: Retrofit): FatSecretApiService {
+        return retrofit.create(FatSecretApiService::class.java)
     }
 }
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -36,7 +37,9 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideFoodRepository(apiService: ApiService): FoodRepository {
-        return FoodRepository(apiService)
+    fun provideRepository(
+        apiService: FatSecretApiService
+    ): Repository {
+        return Repository(apiService)
     }
 }
