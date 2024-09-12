@@ -134,6 +134,7 @@ dependencies {
 
     //okhttp3
     implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
 
 }
 
