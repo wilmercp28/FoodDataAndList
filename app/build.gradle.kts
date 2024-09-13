@@ -120,17 +120,17 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     //Hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-compiler:2.51.1")
+    implementation(libs.hilt.android.v2511)
+    ksp(libs.hilt.compiler.v2511)
 
     //navigation
     val nav_version = "2.7.7"
 
     // Jetpack Compose integration
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.navigation.compose)
 
-    //timber
-    implementation (libs.timber)
+    //Gson
+    implementation (libs.gson)
 
     //okhttp3
     implementation (libs.okhttp)

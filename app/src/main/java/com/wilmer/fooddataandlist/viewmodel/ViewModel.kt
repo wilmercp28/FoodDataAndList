@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.wilmer.fooddataandlist.BuildConfig
 import com.wilmer.fooddataandlist.data.model.FoodsSearchResponse
 import com.wilmer.fooddataandlist.data.model.Resource
+import com.wilmer.fooddataandlist.data.remote.FatSecretApiService
 import com.wilmer.fooddataandlist.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -17,12 +18,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FoodViewModel @Inject constructor( private val repository: Repository) : ViewModel() {
+class FoodViewModel @Inject constructor(
+    private val repository: Repository,
+    private val apiService: FatSecretApiService
+) : ViewModel() {
 
-    private val _foodSearchResult = MutableStateFlow<Resource<FoodsSearchResponse>?>(null)
-    val foodSearchResult: MutableStateFlow<Resource<FoodsSearchResponse>?> get() = _foodSearchResult
+    private val _foodSearchResult = MutableStateFlow<FoodsSearchResponse?>(null)
+    val foodSearchResult: StateFlow<FoodsSearchResponse?> get() = _foodSearchResult
 
-    fun searchFoods(
+     fun searchFoods(
         searchExpression: String,
         pageNumber: Int = 0,
         maxResults: Int = 50,
@@ -34,7 +38,7 @@ class FoodViewModel @Inject constructor( private val repository: Repository) : V
     ) {
         if (searchExpression.isBlank()) return
         viewModelScope.launch {
-            _foodSearchResult.value = Resource.Loading()
+            _foodSearchResult.value = null
             delay(1000)
             _foodSearchResult.value = repository.searchFoods(
                 searchExpression, pageNumber, maxResults, includeSubCategories,

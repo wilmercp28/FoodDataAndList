@@ -1,16 +1,10 @@
 package com.wilmer.fooddataandlist.data.remote
 
 
-import com.wilmer.fooddataandlist.data.model.FoodsSearch
 import com.wilmer.fooddataandlist.data.model.FoodsSearchResponse
-import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
+
 import retrofit2.http.Query
 
 interface FatSecretApiService {

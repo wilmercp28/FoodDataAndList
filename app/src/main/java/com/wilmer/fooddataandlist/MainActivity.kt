@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.wilmer.fooddataandlist.data.model.Food
 import com.wilmer.fooddataandlist.data.model.Resource
@@ -26,6 +27,7 @@ import com.wilmer.fooddataandlist.viewmodel.FoodViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -44,7 +46,6 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
 @Composable
 fun Test(
     viewModel: FoodViewModel
@@ -54,22 +55,20 @@ fun Test(
     Column {
         TextField(value = query, onValueChange = {
             query = it
-            viewModel.searchFoods(query, maxResults = 1)
+                viewModel.searchFoods(query, maxResults = 1)
         })
 
-        if (results is Resource.Success) {
-            val foods = (results as Resource.Success).data.foodsSearch?.results?.food
-            LazyColumn {
-                items(foods?.size ?:0) { index ->
-                    val food = foods?.get(index)
-                    Text(text = food?.foodName ?: "No name")
-                }
-
-
+        val foods = results?.foodsSearch?.results?.food
+        LazyColumn {
+            items(foods?.size ?: 0) { index ->
+                val food = foods?.get(index)
+                Text(text = food?.foodName ?: "No name")
             }
+
+
         }
 
-        if (results is Resource.Loading){
+        if (results == null) {
             CircularProgressIndicator()
         }
     }

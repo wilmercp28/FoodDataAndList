@@ -29,13 +29,11 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
+        return OkHttpClient.Builder()
             .addInterceptor(OAuthInterceptor(consumerKey, consumerSecret, accessToken, accessSecret))
+            .addInterceptor(loggingInterceptor)
             .build()
 
-
-        return okHttpClient
     }
 
     @Provides

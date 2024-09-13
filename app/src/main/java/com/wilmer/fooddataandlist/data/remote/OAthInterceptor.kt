@@ -62,6 +62,8 @@ class OAuthInterceptor(
             }
             .build()
 
+        Log.d("OAuthInterceptor", "URL with params: $urlWithParams")
+
         val newRequest = request.newBuilder().url(urlWithParams).build()
 
         return chain.proceed(newRequest)
