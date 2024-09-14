@@ -107,6 +107,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -122,9 +123,6 @@ dependencies {
     //Hilt
     implementation(libs.hilt.android.v2511)
     ksp(libs.hilt.compiler.v2511)
-
-    //navigation
-    val nav_version = "2.7.7"
 
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)

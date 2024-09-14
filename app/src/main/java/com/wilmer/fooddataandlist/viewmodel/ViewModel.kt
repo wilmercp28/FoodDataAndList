@@ -1,6 +1,9 @@
 package com.wilmer.fooddataandlist.viewmodel
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wilmer.fooddataandlist.BuildConfig
@@ -20,13 +23,21 @@ import javax.inject.Inject
 @HiltViewModel
 class FoodViewModel @Inject constructor(
     private val repository: Repository,
-    private val apiService: FatSecretApiService
 ) : ViewModel() {
 
     private val _foodSearchResult = MutableStateFlow<FoodsSearchResponse?>(null)
     val foodSearchResult: StateFlow<FoodsSearchResponse?> get() = _foodSearchResult
 
-     fun searchFoods(
+
+    suspend fun fetchAccessToken() {
+        repository.fetchAccessToken(
+            clientId = BuildConfig.CLIENT_ID,
+            clientSecret = BuildConfig.CLIENT_SECRET,
+            scope = "basic"
+        )
+    }
+
+    suspend fun searchFoods(
         searchExpression: String,
         pageNumber: Int = 0,
         maxResults: Int = 50,
@@ -37,15 +48,12 @@ class FoodViewModel @Inject constructor(
         format: String = "json"
     ) {
         if (searchExpression.isBlank()) return
-        viewModelScope.launch {
-            _foodSearchResult.value = null
-            delay(1000)
-            _foodSearchResult.value = repository.searchFoods(
-                searchExpression, pageNumber, maxResults, includeSubCategories,
-                includeFoodImages, includeFoodAttributes, flagDefaultServing, format
-            )
-            Log.d("FoodViewModel", "Search result: ${_foodSearchResult.value}")
-        }
+        _foodSearchResult.value = null
+        delay(1000)
+        _foodSearchResult.value = repository.searchFoods(
+            searchExpression, pageNumber, maxResults, includeSubCategories,
+            includeFoodImages, includeFoodAttributes, flagDefaultServing, format
+        )
     }
 
 }

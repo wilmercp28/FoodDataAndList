@@ -1,6 +1,8 @@
 package com.wilmer.fooddataandlist
 
 import android.app.Application
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -37,6 +39,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val viewModel: FoodViewModel by viewModels()
+
+            LaunchedEffect(Unit) {
+                viewModel.fetchAccessToken()
+            }
             FoodDataAndListTheme {
                 Test(viewModel = viewModel)
 
@@ -52,10 +58,14 @@ fun Test(
 ) {
     var query by remember { mutableStateOf("") }
     val results by viewModel.foodSearchResult.collectAsState()
+    val scope = rememberCoroutineScope()
+
     Column {
         TextField(value = query, onValueChange = {
             query = it
+            scope.launch {
                 viewModel.searchFoods(query, maxResults = 1)
+            }
         })
 
         val foods = results?.foodsSearch?.results?.food

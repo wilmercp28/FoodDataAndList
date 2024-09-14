@@ -1,11 +1,13 @@
 package com.wilmer.fooddataandlist.dependency
 
 import com.wilmer.fooddataandlist.data.remote.FatSecretApiService
+import com.wilmer.fooddataandlist.data.remote.OAuthTokenService
 import com.wilmer.fooddataandlist.data.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 
@@ -16,8 +18,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideRepository(apiService: FatSecretApiService): Repository {
-        return Repository(apiService)
+    fun provideRepository(apiService: FatSecretApiService, tokenApiService: OAuthTokenService): Repository {
+        return Repository(apiService,tokenApiService)
     }
 }
 
