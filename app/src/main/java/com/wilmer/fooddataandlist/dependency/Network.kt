@@ -4,7 +4,6 @@ import com.wilmer.fooddataandlist.BuildConfig
 import com.wilmer.fooddataandlist.data.model.OAuthTokenResponse
 import com.wilmer.fooddataandlist.data.remote.FatSecretApiService
 import com.wilmer.fooddataandlist.data.remote.OAuthInterceptor
-import com.wilmer.fooddataandlist.data.remote.OAuthTokenService
 import okhttp3.logging.HttpLoggingInterceptor
 import dagger.Module
 import dagger.Provides
@@ -65,19 +64,6 @@ object NetworkModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    @Named("tokenOkHttpClient")
-    fun provideOkHttpClient(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
-    }
-
     // Provide Retrofit for API calls
     @Provides
     @Singleton
@@ -90,18 +76,6 @@ object NetworkModule {
             .build()
     }
 
-    // Provide Retrofit for access token calls
-    @Provides
-    @Singleton
-    @Named("tokenRetrofit")
-    fun provideRetrofitForToken(@Named("tokenOkHttpClient") okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://oauth.fatsecret.com/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
     // Provide the FatSecret API service
     @Provides
     @Singleton
@@ -109,11 +83,5 @@ object NetworkModule {
         return retrofit.create(FatSecretApiService::class.java)
     }
 
-    // Provide the OAuth token service
-    @Provides
-    @Singleton
-    fun provideOAuthTokenService(@Named("tokenRetrofit") retrofit: Retrofit): OAuthTokenService {
-        return retrofit.create(OAuthTokenService::class.java)
-    }
 }
 

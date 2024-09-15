@@ -29,13 +29,6 @@ class FoodViewModel @Inject constructor(
     val foodSearchResult: StateFlow<FoodsSearchResponse?> get() = _foodSearchResult
 
 
-    suspend fun fetchAccessToken() {
-        repository.fetchAccessToken(
-            clientId = BuildConfig.CLIENT_ID,
-            clientSecret = BuildConfig.CLIENT_SECRET,
-            scope = "basic"
-        )
-    }
 
     suspend fun searchFoods(
         searchExpression: String,
