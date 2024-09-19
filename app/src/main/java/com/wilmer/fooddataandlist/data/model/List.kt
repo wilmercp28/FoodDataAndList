@@ -1,25 +1,19 @@
 package com.wilmer.fooddataandlist.data.model
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.ui.graphics.vector.ImageVector
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.collections.List
 
 data class ShoppingList(
-    val id: String = UUID.randomUUID().toString(),
+    val id: UUID = UUID.randomUUID(),
     val name: String,
     val creationDate: LocalDateTime = LocalDateTime.now(),
+    val icon: ImageVector = Icons.Default.ShoppingCart,
     val items: List<Item>
-){
-    fun addItem(item: Item): ShoppingList{
-        return this.copy(items = this.items + item)
-    }
-    fun removeItem(item: Item): ShoppingList{
-        return this.copy(items = this.items - item)
-    }
-    fun changeName(newName: String): ShoppingList{
-        return this.copy(name = newName)
-    }
-}
+)
 
 data class Item(
     val id: Long,

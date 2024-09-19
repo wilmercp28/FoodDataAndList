@@ -1,33 +1,33 @@
 package com.wilmer.fooddataandlist.viewmodel
 
-import android.content.Intent
-import android.net.Uri
-import android.util.Log
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.wilmer.fooddataandlist.BuildConfig
+import com.wilmer.fooddataandlist.data.mock.getMockShoppingList
 import com.wilmer.fooddataandlist.data.model.FoodsSearchResponse
-import com.wilmer.fooddataandlist.data.model.Resource
-import com.wilmer.fooddataandlist.data.remote.FatSecretApiService
+import com.wilmer.fooddataandlist.data.model.ShoppingList
 import com.wilmer.fooddataandlist.data.repository.Repository
+import com.wilmer.fooddataandlist.utilities.ListManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FoodViewModel @Inject constructor(
+open class FoodViewModel @Inject constructor(
     private val repository: Repository,
 ) : ViewModel() {
+
+    private val _shoppingLists = MutableStateFlow<List<ShoppingList>>(getMockShoppingList(100))
+    open val shoppingLists: StateFlow<List<ShoppingList>> get() = _shoppingLists
 
     private val _foodSearchResult = MutableStateFlow<FoodsSearchResponse?>(null)
     val foodSearchResult: StateFlow<FoodsSearchResponse?> get() = _foodSearchResult
 
+    val listManager = ListManager(_shoppingLists)
+
+    fun changeShoppingList(shoppingList: List<ShoppingList>) {
+        _shoppingLists.value = shoppingList
+    }
 
 
     suspend fun searchFoods(

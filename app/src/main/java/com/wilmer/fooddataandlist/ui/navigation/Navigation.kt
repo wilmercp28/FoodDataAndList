@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.wilmer.fooddataandlist.ui.screens.HomeScreen
+import com.wilmer.fooddataandlist.ui.screens.ListView
 import com.wilmer.fooddataandlist.viewmodel.FoodViewModel
 
 @Composable
@@ -17,10 +18,11 @@ fun Navigation(viewModel: FoodViewModel, navController: NavHostController) {
             HomeScreen(viewModel, navController)
         }
         composable(
-            route = ,
-            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
+            route = Destinations.ListView.route.plus("/{listId}"),
+            arguments = listOf(navArgument("listId") { type = NavType.IntType })
         ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getInt("itemId")
+            val listId = backStackEntry.arguments?.getInt("listId")
+            ListView(viewModel,navController,listId)
 
         }
     }
