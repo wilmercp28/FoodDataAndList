@@ -38,9 +38,6 @@ fun HomeScreen(viewModel: FoodViewModel, navController: NavHostController) {
     var selectedTab by remember { mutableStateOf(Tabs.Lists) }
 
     Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = selectedTab.title) })
-        },
         bottomBar = {
             BottomAppBar {
                 TabRow(
